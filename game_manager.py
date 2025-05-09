@@ -37,3 +37,4 @@ class GameManager:
                 if self.board.check_hit(ast.literal_eval(self.client.last_message)):
                     self.client.send_messages(str(True))
                     self.client.clean_message()
+
