@@ -16,7 +16,6 @@ class Client:
             if not data:
                 self.s.close()
                 break
-            print(f"Received message: {data.decode()}")
             self.last_message = data.decode()
 
     def send_messages(self,message):

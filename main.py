@@ -1,3 +1,5 @@
+from setuptools.command.egg_info import write_entries
+
 from board import Board
 from player import Player
 from drawings import Drawings
@@ -10,8 +12,11 @@ HOST = "127.0.0.1"
 PORT = 2222
 submarine_size = [3]
 
+rows = 10
+columns = 10
+
 board = Board(12,12)
-draw = Drawings(board)
+draw = Drawings(board,board.get_enemy_board())
 player = Player(draw,board,submarine_size)
 client = Client(HOST,PORT)
 
