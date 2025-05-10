@@ -1,8 +1,9 @@
 class Board:
     def __init__(self,rows,columns):
         self.matrix = [[0 for _ in range(columns)] for _ in range(rows)]
-        self.enemy_board = [[0 for _ in range(10)] for _ in range(10)]
+        self.enemy_board = [[0 for _ in range(columns)] for _ in range(rows)]
         self.submarine_position_list = []
+
 
     def get_rows(self):
         return len(self.matrix)
@@ -31,6 +32,9 @@ class Board:
             for j in range(len(self.matrix[i])):
                 if self.matrix[i][j] != "S":
                     self.matrix[i][j] = "~"
+        for i in range(len(self.enemy_board)):
+            for j in range(len(self.enemy_board)):
+                self.enemy_board[i][j] = "~"
 
     def check_hit(self,pos):
         row, column = pos

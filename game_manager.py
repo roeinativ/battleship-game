@@ -15,7 +15,6 @@ class GameManager:
         self.client.use_client()
         if self.player.choose_submarine_position():
             self.board.fill_water()
-            self.draw.fill_empty_spaces_with_water()
             print()
             self.draw.draw_board(self.board.get_rows() - 2,self.board.get_columns() - 2)
             self.client.send_messages("ready")
@@ -59,7 +58,10 @@ class GameManager:
                     t = 1
 
                 else:
-                    self.client.send_messages(self.board.check_hit(ast.literal_eval(self.client.last_message)))
+                    message = self.board.check_hit(ast.literal_eval(self.client.last_message))
+                    self.client.send_messages(message)
+                    if message != "again":
+                        self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                     self.client.clean_message()
 
 

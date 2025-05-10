@@ -1,101 +1,63 @@
 class Drawings:
-    def __init__(self, board, enemy_board=None):
+    def __init__(self, board):
         self.board = board
-        self.enemy_board = enemy_board
+        self.blue = "\033[34m"
+        self.red = "\033[31m"
+        self.yellow = "\033[33m"
+        self.reset = "\033[0m"
+
+    def get_colored_cell(self, val):
+        if val == "S":
+            return f"{self.blue} {val} {self.reset}"
+        elif val == "X":
+            return f"{self.red} {val} {self.reset}"
+        elif val == "*":
+            return f"{self.yellow} {val} {self.reset}"
+        elif val == "~":
+            return f"{self.reset} ~ {self.reset}"
+        elif val in [0, None, ""]:
+            return "   "
+        else:
+            return f" {val} "
 
     def draw_board(self, rows, columns):
-        # Draw header
-        header = "   "
-        for col in range(columns):
-            col_num = col + 1
-            if col_num < 10:
-                header += f" {col_num} "
-            else:
-                header += f"{col_num} "
-            if col < columns - 1:
-                header += "|"
-
-        if self.enemy_board is not None:
-            header += "          "
-            header += "   "
+        def build_header(columns):
+            header = "   "
             for col in range(columns):
                 col_num = col + 1
-                if col_num < 10:
-                    header += f" {col_num} "
-                else:
-                    header += f"{col_num} "
+                header += f" {col_num}" if col_num < 10 else f" {col_num}"
                 if col < columns - 1:
-                    header += "|"
+                    header += " |"
+            return header
 
-        print(header)
+        your_header = build_header(columns)
+        enemy_header = build_header(columns)
 
-        # Draw rows
+        mid_space = " " * 10
+        print("\n YOUR BOARD " + " " * (len(your_header) - 11) + mid_space + "ENEMY BOARD")
+        print(your_header + mid_space + enemy_header)
+
         for r in range(rows):
-            actual_row = r + 1  # Convert to 1-based indexing for display
-            row_str = f" {actual_row} " if actual_row < 10 else f"{actual_row} "
+            row_label = f" {r + 1}" if r + 1 < 10 else f"{r + 1}"
+            row_str = row_label + " "
 
             for c in range(columns):
-                actual_col = c + 1  # Convert to 1-based indexing for display
-                shape = self.board.get_matrix()[actual_row][actual_col]
-                if not shape:
-                    row_str += "   "
-                else:
-                    row_str += f" {shape} "
+                val = self.board.get_matrix()[r + 1][c + 1]
+                row_str += self.get_colored_cell(val)
                 if c < columns - 1:
                     row_str += "|"
 
-            # Draw enemy board if present
-            if self.enemy_board is not None:
-                row_str += "          "
-                row_str += f" {actual_row} " if actual_row < 10 else f"{actual_row} "
-                for c in range(columns):
-                    actual_col = c + 1  # Convert to 1-based indexing for display
-                    if isinstance(self.enemy_board, list):
-                        # For list type, use r and c (0-based)
-                        shape = self.enemy_board[r][c]
-                    else:
-                        # For Board object type, use actual_row and actual_col (1-based)
-                        shape = self.enemy_board.get_matrix()[actual_row][actual_col]
-                    if not shape:
-                        row_str += " ~ "
-                    else:
-                        row_str += f" {shape} "
-                    if c < columns - 1:
-                        row_str += "|"
+            row_str += mid_space
+            row_str += row_label + " "
+            for c in range(columns):
+                val = self.board.get_enemy_board()[r + 1][c + 1]
+                row_str += self.get_colored_cell(val)
+                if c < columns - 1:
+                    row_str += "|"
 
             print(row_str)
 
             if r < rows - 1:
-                separator = "   "
-                for c in range(columns):
-                    separator += "---"
-                    if c < columns - 1:
-                        separator += "+"
-                if self.enemy_board is not None:
-                    separator += "          "
-                    separator += "   "
-                    for c in range(columns):
-                        separator += "---"
-                        if c < columns - 1:
-                            separator += "+"
-                print(separator)
-
-    def fill_empty_spaces_with_water(self):
-        rows = len(self.board.get_matrix())
-        cols = len(self.board.get_matrix()[0]) if rows > 0 else 0
-
-        for i in range(rows):
-            for j in range(cols):
-                current_value = self.board.get_matrix()[i][j]
-                if not current_value or str(current_value).strip() == "":
-                    self.board.get_matrix()[i][j] = "~"
-
-        if self.enemy_board is not None and not isinstance(self.enemy_board, list):
-            enemy_rows = len(self.enemy_board.get_matrix())
-            enemy_cols = len(self.enemy_board.get_matrix()[0]) if enemy_rows > 0 else 0
-
-            for i in range(enemy_rows):
-                for j in range(enemy_cols):
-                    current_value = self.enemy_board.get_matrix()[i][j]
-                    if not current_value or str(current_value).strip() == "":
-                        self.enemy_board.get_matrix()[i][j] = "~"
+                sep = "   " + ("----" * columns)[:-1]
+                sep += mid_space + "   " + ("----" * columns)[:-1]
+                print(sep)

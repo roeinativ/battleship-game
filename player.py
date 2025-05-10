@@ -45,7 +45,7 @@ class Player:
         while check:
             try:
                 place_row = int(input("Choose a row to place a part of the ship: "))
-                if place_row > self.board.get_rows() - 2 or place_row <= 0:
+                if place_row <= 0 or place_row > self.board.get_rows() - 2:
                     print("You cant type a number bigger or lower than the number of rows on the board")
                 else:
                     check = False
@@ -60,7 +60,7 @@ class Player:
         while check:
             try:
                 place_column = int(input("Choose a column to place a part of the ship: "))
-                if place_column > self.board.get_columns() - 2 or place_column <= 0:
+                if place_column <= 0 or place_column > self.board.get_columns() - 2:
                     print("You cant type a number bigger or lower than the number of columns on the board")
                 else:
                     check = False

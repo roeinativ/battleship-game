@@ -1,5 +1,3 @@
-from setuptools.command.egg_info import write_entries
-
 from board import Board
 from player import Player
 from drawings import Drawings
@@ -16,7 +14,7 @@ rows = 10
 columns = 10
 
 board = Board(12,12)
-draw = Drawings(board,board.get_enemy_board())
+draw = Drawings(board)
 player = Player(draw,board,submarine_size)
 client = Client(HOST,PORT)
 
