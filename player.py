@@ -8,34 +8,40 @@ class Player:
         self.submarine_size = submarine_size
 
     def choose_submarine_position(self):
-            player_choice = input("Welcome to battleship for 2 players, choose to place your ships manually or randomize their position [r/p]: ")
-            if player_choice == "p":
-                for i in range(len(self.submarine_size)):
-                    points = 0
-                    check = True
-                    while check:
-                        check_full = True
-                        print(f"Ship size of {self.submarine_size[i]}")
-                        while check_full:
-                            arr = self.place_submarine(i)
-                            if not arr:
-                                print("You must place the submarine in a different location")
-                            else:
-                                check_full = False
-                                for j in range(len(arr)):
-                                    row,col = arr[j]
-                                    if self.board.get_matrix()[row][col] == "S" or not self.check_surrounding(arr) or not arr:
-                                        print("You must place the submarine in a different location")
-                                        break
-                                    else:
-                                        points += 1
-                                if points == len(arr):
-                                    check = False
-                                    for k in range(len(arr)):
-                                        self.board.get_matrix()[arr[k][0]][arr[k][1]] = "S"
-                                    self.board.add_arr_pos(arr)
-                                    self.draw.draw_board(self.board.get_rows() - 2,self.board.get_columns() - 2)
-                return True
+            check1 = True
+            while check1:
+                player_choice = input("Welcome to battleship for 2 players, choose to place your ships manually or randomize their position [r/p]: ")
+                if player_choice == "p":
+                    check1 = False
+                    for i in range(len(self.submarine_size)):
+                        points = 0
+                        check2 = True
+                        while check2:
+                            check_full = True
+                            print(f"Ship size of {self.submarine_size[i]}")
+                            while check_full:
+                                arr = self.place_submarine(i)
+                                if not arr:
+                                    print("You must place the submarine in a different location")
+                                else:
+                                    check_full = False
+                                    for j in range(len(arr)):
+                                        row,col = arr[j]
+                                        if self.board.get_matrix()[row][col] == "S" or not self.check_surrounding(arr) or not arr:
+                                            print("You must place the submarine in a different location")
+                                            break
+                                        else:
+                                            points += 1
+                                    if points == len(arr):
+                                        check2 = False
+                                        for k in range(len(arr)):
+                                            self.board.get_matrix()[arr[k][0]][arr[k][1]] = "S"
+                                        self.board.add_arr_pos(arr)
+                                        self.draw.draw_board(self.board.get_rows() - 2,self.board.get_columns() - 2)
+                    return True
+
+                else:
+                    print("You must enter p or r")
 
 
 
