@@ -10,6 +10,7 @@ class Server:
         self.port = port
         self.clients = []
         self.ready_clients = []
+        self.yes_clients = []
 
 
     def threaded_client(self,conn,addr):
@@ -32,7 +33,15 @@ class Server:
                     self.ready_clients[0].sendall("1".encode())
                     self.ready_clients[1].sendall("0".encode())
 
+            elif data.decode() == "yes":
+                self.yes_clients.append(conn)
+                if len(self.yes_clients) == 2:
+                    self.yes_clients[0].sendall("1".encode())
+                    self.yes_clients[1].sendall("0".encode())
 
+            elif data.decode() == "no":
+                for client in self.clients:
+                    client.sendall("stop".encode())
 
             else:
                 for client in self.clients:
