@@ -25,7 +25,6 @@ class Client:
 
     def use_client(self):
             self.s.connect((self.host,self.port))
-            print(f"Connected on port {self.port}")
             start_new_thread(self.receive_messages, ())
 
     def await_for_message(self):

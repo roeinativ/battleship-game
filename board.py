@@ -111,3 +111,9 @@ class Board:
                 if self.submarine_position_list[i][j][0] != -1 or self.submarine_position_list[i][j][1] != -1:
                     return False
         return True
+
+    def clean_board(self,rows,columns):
+        self.matrix = [[0 for _ in range(columns)] for _ in range(rows)]
+        self.enemy_board = [[0 for _ in range(columns)] for _ in range(rows)]
+        self.submarine_position_list = []
+        self.save_submarine_position_list = []

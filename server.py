@@ -36,8 +36,10 @@ class Server:
             elif data.decode() == "yes":
                 self.yes_clients.append(conn)
                 if len(self.yes_clients) == 2:
-                    self.yes_clients[0].sendall("1".encode())
-                    self.yes_clients[1].sendall("0".encode())
+                    for client in self.yes_clients:
+                        client.sendall(" ".encode())
+                        self.ready_clients = []
+                        self.yes_clients = []
 
             elif data.decode() == "no":
                 for client in self.clients:
