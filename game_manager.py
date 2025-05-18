@@ -79,15 +79,21 @@ class GameManager:
 
                             self.client.clean_message()
                             self.client.await_for_message()
-                            self.client.clean_message()
+
 
                             if self.client.last_message == "stop":
-                                print("Enemy has chosen to quit the game")
                                 game_loop = False
                                 game_on = False
+
+                            self.client.clean_message()
                         else:
                             self.client.send_messages("no")
+                            print("Waiting for enemy to respond...")
+                            self.client.clean_message()
+                            self.client.await_for_message()
                             self.client.s.close()
+
+
                             game_loop = False
                             game_on = False
 
@@ -122,16 +128,23 @@ class GameManager:
                                 self.board.clean_board(self.board.get_rows(), self.board.get_columns())
                                 game_loop = False
 
+
                                 self.client.clean_message()
                                 self.client.await_for_message()
-                                self.client.clean_message()
 
                                 if self.client.last_message == "stop":
                                     game_loop = False
                                     game_on = False
+
+                                self.client.clean_message()
                             else:
                                 self.client.send_messages("no")
+                                print("Waiting for enemy to respond...")
+                                self.client.clean_message()
+                                self.client.await_for_message()
                                 self.client.s.close()
+
+
                                 game_loop = False
                                 game_on = False
 
