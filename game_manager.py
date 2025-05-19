@@ -6,14 +6,11 @@ from board import Board
 
 class GameManager:
 
-    def __init__(self,board,player,client,draw):
+    def __init__(self, board, player, client, draw):
         self.board = board
         self.player = player
         self.client = client
         self.draw = draw
-
-
-
 
     def start_game(self):
         self.client.use_client()
@@ -22,12 +19,13 @@ class GameManager:
             if self.player.choose_submarine_position():
                 self.board.fill_water()
                 print()
-                self.draw.draw_board(self.board.get_rows() - 2,self.board.get_columns() - 2)
+                self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                 arr = self.board.submarine_position_list
                 self.board.set_save_pos(arr)
                 self.client.send_messages("ready")
 
-            print("Waiting for enemy to respond...")
+            print(
+                "Waiting for enemy to respond...")  # all print messages that aren't logs should be in a drawings class
             self.client.await_for_message()
 
             t = int(self.client.last_message)
@@ -40,15 +38,15 @@ class GameManager:
                     print("Your turn")
                     fire_row = self.player.fire_row()
                     fire_column = self.player.fire_column()
-                    self.client.send_messages(str((fire_row,fire_column)))
+                    self.client.send_messages(str((fire_row, fire_column)))
                     self.client.clean_message()
                     self.client.await_for_message()
 
-
-                    if self.client.last_message not in ["true","false","again","over"]:
+                    if self.client.last_message not in ["true", "false", "again", "over"]:
                         self.board.get_enemy_board()[fire_row][fire_column] = "X"
                         print("reached")
-                        self.board.surround_stars(ast.literal_eval(self.client.last_message),self.board.get_enemy_board())
+                        self.board.surround_stars(ast.literal_eval(self.client.last_message),
+                                                  self.board.get_enemy_board())
                         self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                         print("You have destroyed a ship!")
 
@@ -74,12 +72,11 @@ class GameManager:
                         print("You have won the game!")
                         if self.player.play_again():
                             self.client.send_messages("yes")
-                            self.board.clean_board(self.board.get_rows(),self.board.get_columns())
+                            self.board.clean_board(self.board.get_rows(), self.board.get_columns())
                             game_loop = False
 
                             self.client.clean_message()
                             self.client.await_for_message()
-
 
                             if self.client.last_message == "stop":
                                 game_loop = False
@@ -92,7 +89,6 @@ class GameManager:
                             self.client.clean_message()
                             self.client.await_for_message()
                             self.client.s.close()
-
 
                             game_loop = False
                             game_on = False
@@ -111,12 +107,9 @@ class GameManager:
                         message = self.board.check_hit(ast.literal_eval(self.client.last_message))
                         self.client.send_messages(str(message))
 
-
                         if message != "again":
                             self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                         self.client.clean_message()
-
-
 
                         if self.board.check_game_over():
                             time.sleep(0.5)
@@ -127,7 +120,6 @@ class GameManager:
                                 self.client.send_messages("yes")
                                 self.board.clean_board(self.board.get_rows(), self.board.get_columns())
                                 game_loop = False
-
 
                                 self.client.clean_message()
                                 self.client.await_for_message()
@@ -144,9 +136,5 @@ class GameManager:
                                 self.client.await_for_message()
                                 self.client.s.close()
 
-
                                 game_loop = False
                                 game_on = False
-
-
-

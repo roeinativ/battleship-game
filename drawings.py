@@ -1,7 +1,7 @@
 class Drawings:
     def __init__(self, board):
         self.board = board
-        self.blue = "\033[34m"
+        self.blue = "\033[34m" # maybe use constants instead of properties?
         self.red = "\033[31m"
         self.yellow = "\033[33m"
         self.reset = "\033[0m"

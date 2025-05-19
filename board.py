@@ -1,12 +1,12 @@
 import copy
 
+
 class Board:
-    def __init__(self,rows,columns):
+    def __init__(self, rows, columns): # use type hints
         self.matrix = [[0 for _ in range(columns)] for _ in range(rows)]
         self.enemy_board = [[0 for _ in range(columns)] for _ in range(rows)]
         self.submarine_position_list = []
         self.save_submarine_position_list = []
-
 
     def get_rows(self):
         return len(self.matrix)
@@ -23,45 +23,45 @@ class Board:
     def get_enemy_board(self):
         return self.enemy_board
 
-    def add_arr_pos(self,arr):
+    def add_arr_pos(self, arr):
         self.submarine_position_list.append(arr)
 
-    def add_shape(self,pos,shape):
+    def add_shape(self, pos, shape): # use type hints
         row, column = pos
         self.matrix[row][column] = shape
 
-    def set_save_pos(self,arr):
+    def set_save_pos(self, arr):
         self.save_submarine_position_list = copy.deepcopy(arr)
 
     def fill_water(self):
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix[i])):
-                if self.matrix[i][j] != "S":
+                if self.matrix[i][j] != "S":  # what's S / ~? use enums or otherwise, some form of indicative values
                     self.matrix[i][j] = "~"
         for i in range(len(self.enemy_board)):
             for j in range(len(self.enemy_board[i])):
                 self.enemy_board[i][j] = "~"
 
-    def check_horizontal(self,arr):
+    def check_horizontal(self, arr):  # no need for self if you're not using it - utility function
         if len(arr) > 1:
             if arr[0][0] - arr[1][0] == 0:
                 return True
         return False
 
-    def check_hit(self,pos):
+    def check_hit(self, pos):
         row, column = pos
         for i in range(len(self.submarine_position_list)):
             for j in range(len(self.submarine_position_list[i])):
                 if self.submarine_position_list[i][j][0] == row and self.submarine_position_list[i][j][1] == column:
-                    self.submarine_position_list[i][j] = (-1,-1)
-                    self.add_shape(pos,"X")
+                    self.submarine_position_list[i][j] = (-1, -1)
+                    self.add_shape(pos, "X")
                     print("Enemy has hit a ship")
 
                     for c in range(len(self.submarine_position_list[i])):
-                        if self.submarine_position_list[i][c] != (-1,-1):
+                        if self.submarine_position_list[i][c] != (-1, -1):
                             return "true"
 
-                    self.surround_stars(self.save_submarine_position_list[i],self.matrix)
+                    self.surround_stars(self.save_submarine_position_list[i], self.matrix)
                     return self.save_submarine_position_list[i]
 
         if self.matrix[row][column] == "X" or self.matrix[row][column] == "*":
@@ -69,7 +69,7 @@ class Board:
 
         elif self.matrix[row][column] == "~":
             print("Enemy has missed")
-            self.add_shape(pos,"*")
+            self.add_shape(pos, "*")
             return "false"
 
     def surround_stars(self, arr, board):
@@ -79,6 +79,7 @@ class Board:
 
             if self.check_horizontal(arr):
                 if i == 0:
+                    # export the following 3 lines into a function instead of repeating it
                     board[row][col - 1] = "*"
                     board[row - 1][col - 1] = "*"
                     board[row + 1][col - 1] = "*"
@@ -112,7 +113,7 @@ class Board:
                     return False
         return True
 
-    def clean_board(self,rows,columns):
+    def clean_board(self, rows, columns):
         self.matrix = [[0 for _ in range(columns)] for _ in range(rows)]
         self.enemy_board = [[0 for _ in range(columns)] for _ in range(rows)]
         self.submarine_position_list = []

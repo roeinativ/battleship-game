@@ -1,5 +1,5 @@
 from tabnanny import check
-
+# delete unused imports
 
 class Player:
     def __init__(self,draw,board,submarine_size):
@@ -8,8 +8,9 @@ class Player:
         self.submarine_size = submarine_size
 
     def choose_submarine_position(self):
-            check1 = True
+            check1 = True # what kind of name is check1
             while check1:
+                # print messages should be used in a drawings class (it'll be easier for you to use pygame that way)
                 player_choice = input("Welcome to battleship for 2 players, choose to place your ships manually or randomize their position [r/p]: ")
                 if player_choice == "p":
                     check1 = False
@@ -47,7 +48,7 @@ class Player:
 
 
     def place_row(self):
-        check = True
+        check = True # look at the warnings - clashes with imported check
         while check:
             try:
                 place_row = int(input("Choose a row to place a part of the ship: "))
