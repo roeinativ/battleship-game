@@ -46,12 +46,12 @@ class Server:
             elif data.decode() == "yes" or data.decode() == "no":
                 self.game_over_clients.append(conn)
                 if data.decode() == "no":
-                    n = 1
+                    no = 1
                 else:
-                    n = 0
+                    no = 0
 
                 if len(self.game_over_clients) == 2:
-                    if n == 1:
+                    if no == 1:
                         for client in self.game_over_clients:
                             client.sendall("stop".encode())
                     else:
