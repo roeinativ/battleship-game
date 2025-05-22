@@ -47,7 +47,6 @@ class GameManager:
 
                     if self.client.last_message not in ["true","false","again","over"]:
                         self.board.get_enemy_board()[fire_row][fire_column] = "X"
-                        print("reached")
                         self.board.surround_stars(ast.literal_eval(self.client.last_message),self.board.get_enemy_board())
                         self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                         print("You have destroyed a ship!")

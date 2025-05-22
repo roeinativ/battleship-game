@@ -1,5 +1,6 @@
 import socket
 from _thread import start_new_thread
+from datetime import datetime
 
 
 
@@ -11,6 +12,15 @@ class Server:
         self.clients = []
         self.ready_clients = []
         self.game_over_clients = []
+        self.turn = 0
+
+
+    def update_stat_file(self):
+        now = datetime.now()
+        date = now.strftime("%Y-%m-%d %H:%M:%S")
+        with open("stat.csv","a") as file:
+            file.write(f"{date},{self.turn + 1}\n")
+
 
 
     def threaded_client(self,conn,addr):
@@ -50,11 +60,21 @@ class Server:
                             self.ready_clients = []
                             self.game_over_clients = []
 
+
             else:
+                if data.decode()  in ["true","false"]:
+                    self.turn += 1
+                    print(self.turn)
+                print(self.turn)
                 for client in self.clients:
                     if client != conn:
                         client.sendall(data)
                         print(f"Sending to other client {data.decode()}")
+
+                if data.decode() == "over":
+                    self.update_stat_file()
+                    self.turn = 0
+
 
 
     def run_server(self):

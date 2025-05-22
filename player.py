@@ -175,12 +175,17 @@ class Player:
     def play_again(self):
         check = True
         while check:
-            play_again = input("Game over, do you want to play again [y/n]: ")
+            play_again = input("Game over, do you want to play again [y/n] / you can type stat to se the statistics of the game: ")
             if play_again.isalpha():
                 if play_again == "y":
                     return True
                 elif play_again == "n":
                     return False
+                elif play_again == "stat":
+                    with open("stat.csv","r") as file:
+                        print(file.read())
+
+
             else:
                 print("You must enter a letter")
 
