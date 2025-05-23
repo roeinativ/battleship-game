@@ -59,9 +59,9 @@ class Server:
                         for client in self.game_over_clients:
                             if game_over:
                                 client.sendall("disconnect".encode())
-                                ack = client.recv(1024).decode()
+                                request = client.recv(1024).decode()
 
-                                if ack == "ack_disconnect":
+                                if request == "requested_disconnect":
                                     print(f"Client {client} disconnected")
                                     client.close()
 

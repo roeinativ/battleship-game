@@ -17,6 +17,8 @@ class GameManager:
 
     def start_game(self):
         self.client.use_client()
+        self.draw.draw_welcome()
+        time.sleep(2)
         game_on = True
         while game_on:
             if self.player.choose_submarine_position():
@@ -83,8 +85,10 @@ class GameManager:
 
 
                             if self.client.last_message == "disconnect":
-                                self.client.send_messages("ack_disconnect")
+                                self.client.send_messages("requested_disconnect")
                                 self.client.s.close()
+
+
                                 game_loop = False
                                 game_on = False
 
@@ -96,8 +100,9 @@ class GameManager:
                             self.client.await_for_message()
 
                             if self.client.last_message == "disconnect":
-                                self.client.send_messages("ack_disconnect")
+                                self.client.send_messages("request_disconnect")
                                 self.client.s.close()
+
 
 
                             game_loop = False
@@ -140,8 +145,9 @@ class GameManager:
                                 self.client.await_for_message()
 
                                 if self.client.last_message == "disconnect":
-                                    self.client.send_messages("ack_disconnect")
+                                    self.client.send_messages("requested_disconnect")
                                     self.client.s.close()
+
                                     game_loop = False
                                     game_on = False
 
@@ -153,8 +159,9 @@ class GameManager:
                                 self.client.await_for_message()
 
                                 if self.client.last_message == "disconnect":
-                                    self.client.send_messages("ack_disconnect")
+                                    self.client.send_messages("requested_disconnect")
                                     self.client.s.close()
+
 
 
                                 game_loop = False
