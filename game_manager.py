@@ -1,7 +1,6 @@
 import ast
 import time
 
-from board import Board
 
 
 class GameManager:
@@ -14,7 +13,7 @@ class GameManager:
 
 
 
-
+    # A function that starts the game and uses the other classes to run all of its mechanics.
     def start_game(self):
         self.client.use_client()
         self.draw.draw_welcome()

@@ -6,6 +6,7 @@ class Drawings:
         self.yellow = "\033[33m"
         self.reset = "\033[0m"
 
+    # A function that gives a symbol a color based on what was determined.
     def get_colored_cell(self, val):
         if val == "S":
             return f"{self.blue} {val} {self.reset}"
@@ -20,6 +21,7 @@ class Drawings:
         else:
             return f" {val} "
 
+    # A function that draws the player board and the enemy board.
     def draw_board(self, rows, columns):
         def build_header(columns):
             header = "   "
@@ -62,6 +64,8 @@ class Drawings:
                 sep += mid_space + "   " + ("----" * columns)[:-1]
                 print(sep)
 
+
+    # A function that draws welcome.
     def draw_welcome(self):
         print("""
          __        __   _                            _____     
@@ -77,11 +81,3 @@ class Drawings:
         """)
 
 
-    def draw_game_over(self):
-        print("""
-          ____                         ___                 
-         / ___| __ _ _ __ ___   ___   / _ \\__   _____ _ __ 
-        | |  _ / _` | '_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ '__|
-        | |_| | (_| | | | | | |  __/ | |_| |\\ V /  __/ |   
-         \\____|\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|   
-        """)
