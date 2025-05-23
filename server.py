@@ -64,9 +64,7 @@ class Server:
                                 if ack == "ack_disconnect":
                                     print(f"Client {client} disconnected")
                                     client.close()
-                                    self.clients.remove(client)
-                                    self.game_over_clients.remove(client)
-                                    self.ready_clients.remove(client)
+
                             else:
                                 client.sendall("True".encode())
 
