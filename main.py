@@ -8,7 +8,7 @@ from game_manager import GameManager
 
 HOST = "127.0.0.1"
 PORT = 2222
-submarine_size = [3,2,1]
+submarine_size = [3]
 
 rows = 10
 columns = 10

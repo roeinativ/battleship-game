@@ -45,7 +45,7 @@ class GameManager:
                     self.client.await_for_message()
 
 
-                    if self.client.last_message not in ["true","false","again","over"]:
+                    if self.client.last_message not in ["hit","miss","again","over"]:
                         self.board.get_enemy_board()[fire_row][fire_column] = "X"
                         self.board.surround_stars(ast.literal_eval(self.client.last_message),self.board.get_enemy_board())
                         self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
@@ -54,7 +54,7 @@ class GameManager:
 
 
 
-                    elif self.client.last_message == "true":
+                    elif self.client.last_message == "hit":
                         self.board.get_enemy_board()[fire_row][fire_column] = "X"
                         self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                         print("HIT!, you have another turn")
@@ -62,7 +62,7 @@ class GameManager:
                     elif self.client.last_message == "again":
                         print("You have already hit that place")
 
-                    elif self.client.last_message == "false":
+                    elif self.client.last_message == "miss":
                         self.board.get_enemy_board()[fire_row][fire_column] = "*"
                         self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                         self.client.send_messages("miss")
@@ -73,7 +73,8 @@ class GameManager:
                     if self.client.last_message == "over":
                         print("You have won the game!")
                         if self.player.play_again():
-                            self.client.send_messages("yes")
+                            self.client.send_messages("True")
+                            print("Waiting for enemy to respond...")
                             self.board.clean_board(self.board.get_rows(),self.board.get_columns())
                             game_loop = False
 
@@ -81,13 +82,13 @@ class GameManager:
                             self.client.await_for_message()
 
 
-                            if self.client.last_message == "stop":
+                            if self.client.last_message == "False":
                                 game_loop = False
                                 game_on = False
 
                             self.client.clean_message()
                         else:
-                            self.client.send_messages("no")
+                            self.client.send_messages("False")
                             print("Waiting for enemy to respond...")
                             self.client.clean_message()
                             self.client.await_for_message()
@@ -124,7 +125,8 @@ class GameManager:
                             print("You have lost the game")
 
                             if self.player.play_again():
-                                self.client.send_messages("yes")
+                                self.client.send_messages("True")
+                                print("Waiting for enemy to respond...")
                                 self.board.clean_board(self.board.get_rows(), self.board.get_columns())
                                 game_loop = False
 
@@ -132,13 +134,13 @@ class GameManager:
                                 self.client.clean_message()
                                 self.client.await_for_message()
 
-                                if self.client.last_message == "stop":
+                                if self.client.last_message == "False":
                                     game_loop = False
                                     game_on = False
 
                                 self.client.clean_message()
                             else:
-                                self.client.send_messages("no")
+                                self.client.send_messages("False")
                                 print("Waiting for enemy to respond...")
                                 self.client.clean_message()
                                 self.client.await_for_message()

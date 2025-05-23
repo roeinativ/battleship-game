@@ -59,7 +59,7 @@ class Board:
 
                     for c in range(len(self.submarine_position_list[i])):
                         if self.submarine_position_list[i][c] != (-1,-1):
-                            return "true"
+                            return "hit"
 
                     self.surround_stars(self.save_submarine_position_list[i],self.matrix)
                     return self.save_submarine_position_list[i]
@@ -70,7 +70,7 @@ class Board:
         elif self.matrix[row][column] == "~":
             print("Enemy has missed")
             self.add_shape(pos,"*")
-            return "false"
+            return "miss"
 
     def surround_stars(self, arr, board):
         for i in range(len(arr)):

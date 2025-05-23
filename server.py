@@ -1,7 +1,8 @@
 import socket
 from _thread import start_new_thread
+from ctypes import c_char
 from datetime import datetime
-
+from distutils.command.clean import clean
 
 
 class Server:
@@ -43,31 +44,31 @@ class Server:
                     self.ready_clients[0].sendall("1".encode())
                     self.ready_clients[1].sendall("0".encode())
 
-            elif data.decode() == "yes" or data.decode() == "no":
+
+            elif data.decode() in ["True", "False"]:
+                game_over = False
                 self.game_over_clients.append(conn)
-                if data.decode() == "no":
-                    no = 1
-                else:
-                    no = 0
+                if data.decode() == "False":
+                    game_over = True
 
                 if len(self.game_over_clients) == 2:
-                    if no == 1:
-                        for client in self.game_over_clients:
-                            client.sendall("stop".encode())
-                    else:
-                        for client in self.game_over_clients:
-                            client.sendall(" ".encode())
-                            self.ready_clients = []
-                            self.game_over_clients = []
+                    for client in self.game_over_clients:
+                        if game_over:
+                            client.sendall("False".encode())
+                        else:
+                            client.sendall("True".encode())
+
+                    self.ready_clients = []
+                    self.game_over_clients = []
+
 
             elif data.decode() == "destroyed":
                 self.turn += 1
 
             else:
-                if data.decode() in ["true","false"]:
+                if data.decode() in ["hit","miss"]:
                     self.turn += 1
                     print(self.turn)
-                print(self.turn)
                 for client in self.clients:
                     if client != conn:
                         client.sendall(data)
@@ -76,6 +77,7 @@ class Server:
                 if data.decode() == "over":
                     self.update_stat_file()
                     self.turn = 0
+
 
 
 
