@@ -19,7 +19,7 @@ class Server:
         now = datetime.now()
         date = now.strftime("%Y-%m-%d %H:%M:%S")
         with open("stat.csv","a") as file:
-            file.write(f"{date},{self.turn + 1}\n")
+            file.write(f"{date},{self.turn}\n")
 
 
 
@@ -60,9 +60,11 @@ class Server:
                             self.ready_clients = []
                             self.game_over_clients = []
 
+            elif data.decode() == "destroyed":
+                self.turn += 1
 
             else:
-                if data.decode()  in ["true","false"]:
+                if data.decode() in ["true","false"]:
                     self.turn += 1
                     print(self.turn)
                 print(self.turn)

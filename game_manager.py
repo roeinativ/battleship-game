@@ -50,6 +50,7 @@ class GameManager:
                         self.board.surround_stars(ast.literal_eval(self.client.last_message),self.board.get_enemy_board())
                         self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
                         print("You have destroyed a ship!")
+                        self.client.send_messages("destroyed")
 
 
 
