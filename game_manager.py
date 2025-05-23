@@ -82,7 +82,9 @@ class GameManager:
                             self.client.await_for_message()
 
 
-                            if self.client.last_message == "False":
+                            if self.client.last_message == "disconnect":
+                                self.client.send_messages("ack_disconnect")
+                                self.client.s.close()
                                 game_loop = False
                                 game_on = False
 
@@ -92,7 +94,10 @@ class GameManager:
                             print("Waiting for enemy to respond...")
                             self.client.clean_message()
                             self.client.await_for_message()
-                            self.client.s.close()
+
+                            if self.client.last_message == "disconnect":
+                                self.client.send_messages("ack_disconnect")
+                                self.client.s.close()
 
 
                             game_loop = False
@@ -134,7 +139,9 @@ class GameManager:
                                 self.client.clean_message()
                                 self.client.await_for_message()
 
-                                if self.client.last_message == "False":
+                                if self.client.last_message == "disconnect":
+                                    self.client.send_messages("ack_disconnect")
+                                    self.client.s.close()
                                     game_loop = False
                                     game_on = False
 
@@ -144,7 +151,10 @@ class GameManager:
                                 print("Waiting for enemy to respond...")
                                 self.client.clean_message()
                                 self.client.await_for_message()
-                                self.client.s.close()
+
+                                if self.client.last_message == "disconnect":
+                                    self.client.send_messages("ack_disconnect")
+                                    self.client.s.close()
 
 
                                 game_loop = False

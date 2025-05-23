@@ -10,13 +10,16 @@ class Client:
         self.last_message = None
 
 
+
     def receive_messages(self):
         while True:
-            data = self.s.recv(1024)
-            if not data:
-                self.s.close()
+            try:
+                data = self.s.recv(1024)
+                if not data:
+                    break
+                self.last_message = data.decode()
+            except:
                 break
-            self.last_message = data.decode()
 
     def send_messages(self,message):
         if message:

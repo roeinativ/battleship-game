@@ -1,4 +1,5 @@
 import socket
+import time
 from _thread import start_new_thread
 from ctypes import c_char
 from datetime import datetime
@@ -29,54 +30,74 @@ class Server:
         self.clients.append(conn)
 
         while True:
-            data = conn.recv(1024)
+            try:
+                data = conn.recv(1024)
 
-            if not data:
-                print("Disconnected")
+                if not data:
+                    print("Disconnected")
+                    conn.close()
+                    self.clients.remove(conn)
+                    break
+
+
+                print(f"Received from {addr}: {data.decode()}")
+
+                if data.decode() == "ready":
+                    self.ready_clients.append(conn)
+                    if len(self.ready_clients) == 2:
+                        self.ready_clients[0].sendall("1".encode())
+                        self.ready_clients[1].sendall("0".encode())
+
+
+                elif data.decode() in ["True", "False"]:
+                    game_over = False
+                    self.game_over_clients.append(conn)
+                    if data.decode() == "False":
+                        game_over = True
+
+                    if len(self.game_over_clients) == 2:
+                        for client in self.game_over_clients:
+                            if game_over:
+                                client.sendall("disconnect".encode())
+                                ack = client.recv(1024).decode()
+
+                                if ack == "ack_disconnect":
+                                    print(f"Client {client} disconnected")
+                                    client.close()
+                                    self.clients.remove(client)
+                                    self.game_over_clients.remove(client)
+                                    self.ready_clients.remove(client)
+                            else:
+                                client.sendall("True".encode())
+
+                        self.ready_clients = []
+                        self.game_over_clients = []
+
+                        break
+
+
+                elif data.decode() == "destroyed":
+                    self.turn += 1
+
+
+
+
+                else:
+                    if data.decode() in ["hit","miss"]:
+                        self.turn += 1
+                        print(self.turn)
+                    for client in self.clients:
+                        if client != conn:
+                            client.sendall(data)
+                            print(f"Sending to other client {data.decode()}")
+
+                    if data.decode() == "over":
+                        self.update_stat_file()
+                        self.turn = 0
+            except ConnectionResetError:
+                conn.close()
                 break
 
-
-            print(f"Received from {addr}: {data.decode()}")
-
-            if data.decode() == "ready":
-                self.ready_clients.append(conn)
-                if len(self.ready_clients) == 2:
-                    self.ready_clients[0].sendall("1".encode())
-                    self.ready_clients[1].sendall("0".encode())
-
-
-            elif data.decode() in ["True", "False"]:
-                game_over = False
-                self.game_over_clients.append(conn)
-                if data.decode() == "False":
-                    game_over = True
-
-                if len(self.game_over_clients) == 2:
-                    for client in self.game_over_clients:
-                        if game_over:
-                            client.sendall("False".encode())
-                        else:
-                            client.sendall("True".encode())
-
-                    self.ready_clients = []
-                    self.game_over_clients = []
-
-
-            elif data.decode() == "destroyed":
-                self.turn += 1
-
-            else:
-                if data.decode() in ["hit","miss"]:
-                    self.turn += 1
-                    print(self.turn)
-                for client in self.clients:
-                    if client != conn:
-                        client.sendall(data)
-                        print(f"Sending to other client {data.decode()}")
-
-                if data.decode() == "over":
-                    self.update_stat_file()
-                    self.turn = 0
 
 
 
