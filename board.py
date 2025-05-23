@@ -73,37 +73,12 @@ class Board:
             return "miss"
 
     def surround_stars(self, arr, board):
-        for i in range(len(arr)):
-            row = arr[i][0]
-            col = arr[i][1]
-
-            if self.check_horizontal(arr):
-                if i == 0:
-                    board[row][col - 1] = "*"
-                    board[row - 1][col - 1] = "*"
-                    board[row + 1][col - 1] = "*"
-
-                if i == len(arr) - 1 or len(arr) == 1:
-                    board[row][col + 1] = "*"
-                    board[row + 1][col + 1] = "*"
-                    board[row - 1][col + 1] = "*"
-
-                board[row + 1][col] = "*"
-                board[row - 1][col] = "*"
-
-            else:
-                if i == 0:
-                    board[row - 1][col] = "*"
-                    board[row - 1][col - 1] = "*"
-                    board[row - 1][col + 1] = "*"
-
-                if i == len(arr) - 1 or len(arr) == 1:
-                    board[row + 1][col] = "*"
-                    board[row + 1][col + 1] = "*"
-                    board[row + 1][col - 1] = "*"
-
-                board[row][col + 1] = "*"
-                board[row][col - 1] = "*"
+        for row, col in arr:
+            for dr in [-1, 0, 1]:
+                for dc in [-1, 0, 1]:
+                    r, c = row + dr, col + dc
+                    if (r, c) not in arr and 0 <= r < len(board) and 0 <= c < len(board[0]):
+                            board[r][c] = "*"
 
     def check_game_over(self):
         for i in range(len(self.submarine_position_list)):

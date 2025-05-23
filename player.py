@@ -1,4 +1,4 @@
-from tabnanny import check
+import random
 
 
 class Player:
@@ -20,7 +20,7 @@ class Player:
                             check_full = True
                             print(f"Ship size of {self.submarine_size[i]}")
                             while check_full:
-                                arr = self.place_submarine(i)
+                                arr = self.place_submarine(i,self.place_row(),self.place_column(),self.place_direction())
                                 if not arr:
                                     print("You must place the submarine in a different location")
                                 else:
@@ -39,6 +39,40 @@ class Player:
                                         self.board.add_arr_pos(arr)
                                         self.draw.draw_board(self.board.get_rows() - 2,self.board.get_columns() - 2)
                     return True
+
+
+                elif player_choice == "r":
+                    try_pos = True
+                    while try_pos:
+                        self.board.clean_board(12,12)
+                        successful_placements = 0
+
+
+                        for i in range(len(self.submarine_size)):
+                            place = True
+                            while place:
+                                arr = self.place_submarine(i, self.random_pos(), self.random_pos(), self.random_direction())
+
+                                if arr and self.check_surrounding(arr):
+                                    position_free = True
+                                    for row,col in arr:
+                                        if self.board.get_matrix()[row][col] == "S":
+                                            position_free = False
+                                            break
+                                    if position_free:
+                                        for row,col in arr:
+                                            self.board.get_matrix()[row][col] = "S"
+                                        self.board.add_arr_pos(arr)
+                                    successful_placements += 1
+                                    break
+
+                        if successful_placements == len(self.submarine_size):
+                            self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
+                            try_pos = False
+
+                    return True
+
+
 
                 else:
                     print("You must enter p or r")
@@ -75,6 +109,13 @@ class Player:
                 print("You cant type a number bigger or lower than the number of columns on the board")
 
 
+    def random_pos(self):
+        return random.randint(1,10)
+
+    def random_direction(self):
+        directions = ["right","left","up","down"]
+        return random.choice(directions)
+
     def place_direction(self):
         check = True
         while check:
@@ -84,13 +125,10 @@ class Player:
             else:
                 print("You must type the direction of the ship")
 
-    def place_submarine(self, i):
-        row = self.place_row()
-        column = self.place_column()
+    def place_submarine(self,i,row,column,direction):
         arr = [(row, column)]
 
         if self.submarine_size[i] > 1:
-            direction = self.place_direction()
             for j in range(1, self.submarine_size[i]):
                 if direction == "right":
                     column += 1
@@ -113,38 +151,21 @@ class Player:
         return arr
 
     def check_surrounding(self, arr):
-        for i in range(len(arr)):
-            row = arr[i][0]
-            col = arr[i][1]
+        for row, col in arr:
 
-            if i == 0:
-                if col - 1 < 0:
-                    return False
-                if self.board.get_matrix()[row][col - 1] == "S":
-                    return False
-                if row - 1 < 0 or self.board.get_matrix()[row - 1][col - 1] == "S":
-                    return False
-                if row + 1 >= self.board.get_rows() or self.board.get_matrix()[row + 1][col - 1] == "S":
-                    return False
+            directions = [(-1, -1), (-1, 0), (-1, 1),
+                          (0, -1), (0, 1),
+                          (1, -1), (1, 0), (1, 1)]
 
-            elif i == len(arr) - 1:
-                if col + 1 >= self.board.get_columns():
-                    return False
-                if self.board.get_matrix()[row][col + 1] == "S":
-                    return False
-                if row - 1 < 0 or self.board.get_matrix()[row - 1][col + 1] == "S":
-                    return False
-                if row + 1 >= self.board.get_rows() or self.board.get_matrix()[row + 1][col + 1] == "S":
-                    return False
+            for dr, dc in directions:
+                r, c = row + dr, col + dc
 
-            else:
-                if row + 1 >= self.board.get_rows() or self.board.get_matrix()[row + 1][col] == "S":
-                    return False
-                if row - 1 < 0 or self.board.get_matrix()[row - 1][col] == "S":
-                    return False
+
+                if 0 <= r < self.board.get_rows() and 0 <= c < self.board.get_columns():
+                    if self.board.get_matrix()[r][c] == "S":
+                        return False
 
         return True
-
 
     def fire_row(self):
         check = True
@@ -190,6 +211,29 @@ class Player:
                 print("You must enter a letter")
 
 
+
+    def random_position(self):
+        try_pos = True
+        while try_pos:
+            self.board.clean_board()
+            placement_success = False
+            for i in range(len(self.submarine_size)):
+                arr = self.place_submarine(i,self.random_pos(),self.random_pos(),self.random_direction())
+                for j in range(len(arr)):
+                    row,col = arr[j]
+                    if arr[row][col] == "S" or not self.check_surrounding(arr) or not arr:
+                        print("You must place the submarine in a different location")
+                        break
+                    else:
+                        for k in range(len(arr)):
+                            self.board.get_matrix()[arr[k][0]][arr[k][1]] = "S"
+                            self.board.add_arr_pos(arr)
+
+                else:
+                    print("Could not place ship restarting placement")
+
+            if placement_success:
+                break
 
 
 
