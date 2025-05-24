@@ -113,5 +113,5 @@ class Server:
 
 
 # Give the server the ip and port and run it.
-s = Server("127.0.0.1",2222)
+s = Server("127.0.0.1",3333)
 s.run_server()
