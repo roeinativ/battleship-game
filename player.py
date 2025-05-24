@@ -66,7 +66,7 @@ class Player:
                                             self.board.get_matrix()[row][col] = "S"
                                         self.board.add_arr_pos(arr)
                                         successful_placements += 1
-                                    break
+                                    place = False
 
                         if successful_placements == len(self.submarine_size):
                             self.draw.draw_board(self.board.get_rows() - 2, self.board.get_columns() - 2)
