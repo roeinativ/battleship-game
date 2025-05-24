@@ -155,7 +155,7 @@ class Player:
 
         return arr
 
-    # A function that gets an arr and returns true if there are no ships around it.
+    # A function that gets a list and returns true if there are no ships around it.
     def check_surrounding(self, arr):
         for row, col in arr:
 

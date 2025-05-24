@@ -21,19 +21,22 @@ class Drawings:
         else:
             return f" {val} "
 
+    # Builds and returns a formatted header row with column numbers for the game board
+    def build_header(self,columns):
+        header = "   "
+        for col in range(columns):
+            col_num = col + 1
+            header += f" {col_num}" if col_num < 10 else f" {col_num}"
+            if col < columns - 1:
+                header += " |"
+        return header
+
+
     # A function that draws the player board and the enemy board.
     def draw_board(self, rows, columns):
-        def build_header(columns):
-            header = "   "
-            for col in range(columns):
-                col_num = col + 1
-                header += f" {col_num}" if col_num < 10 else f" {col_num}"
-                if col < columns - 1:
-                    header += " |"
-            return header
 
-        your_header = build_header(columns)
-        enemy_header = build_header(columns)
+        your_header = self.build_header(columns)
+        enemy_header = self.build_header(columns)
 
         mid_space = " " * 10
         print("\n YOUR BOARD " + " " * (len(your_header) - 11) + mid_space + "ENEMY BOARD")
